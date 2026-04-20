@@ -2,6 +2,9 @@
 
 本專案已完整達成 HW2-1 至 HW2-4 的所有作業規範。
 
+🚀 **線上展示 (Streamlit Cloud)**: [點擊進入儀表板](https://ck6hhwrnk3jtuwbpaczzsj.streamlit.app/)
+
+
 ## 📋 本專案完成指標 (作業檢核清單)
 
 ### ✅ HW2-1: 獲取與觀察原始資料 (20%)
