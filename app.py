@@ -4,6 +4,7 @@ import sqlite3
 import folium
 from streamlit_folium import st_folium
 import os
+from weather import fetch_and_save_weather
 
 # 1. 設置網頁
 st.set_page_config(page_title="台灣氣象全功能儀表板", layout="wide")
@@ -41,8 +42,12 @@ def main():
     df = get_data_from_db()
     
     if df is None or df.empty:
-        st.error("⚠️ 資料庫中無資料，請先執行 'python weather.py'。")
-        return
+        with st.spinner("⏳ 初次啟動中，正在獲取氣象資料..."):
+            fetch_and_save_weather()
+        df = get_data_from_db()
+        if df is None or df.empty:
+            st.error("⚠️ 無法獲取資料，請檢查 API Key 是否有效。")
+            return
 
     # --- 側邊欄控制 ---
     st.sidebar.header("🎛️ 控制面板")
