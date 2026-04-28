@@ -1,0 +1,47 @@
+Create a complete Python project to fetch 7-day weather forecast data for Taiwan's northern, central, southern, northeastern, eastern, and southeastern regions using the CWA API (specifically the F-A0010-001 endpoint for agricultural weather forecasts), parse the JSON response to extract temperature data (min and max), save it to a CSV file named "weather_data.csv", and build an interactive Streamlit web app with a left-right layout featuring a Folium-based Taiwan map where regions are marked with colored circles based on average temperature (blue <20°C, green 20-25°C, yellow 25-30°C, red >30°C), a date selector dropdown to filter data dynamically, and a data table on the right side showing the selected date's temperatures; ensure the app handles SSL verification issues, uses approximate region coordinates for markers, and includes popups with region details; set up the Python virtual environment, install necessary packages (requests, pandas, streamlit, folium), validate the code by running it to fetch and display data, and make the app runnable via Streamlit.
+
+[ignoring loop detection]
+[SESSION_START: 2026-04-28 09:15:22]
+
+USER: 我正在準備智慧物聯網的 HW2。首先，我需要從 CWA API 獲取「全臺各縣市一週天氣預報」的原始 JSON 資料。請幫我寫一個簡單的腳本，讓我能看清楚資料結構，特別是怎麼定位氣溫資料。
+
+AI: 沒問題。我建議先建立一個 `inspect_weather_data.py`。這個腳本會使用 `requests` 獲取資料，並透過 `json.dumps(indent=4)` 打印出來。
+> 建立檔案: inspect_weather_data.py
+> 提示: 您需要檢查 'records' -> 'location' -> 'weatherElement' 裡面的 'MinT' 與 'MaxT'。
+
+---
+
+USER: 資料拿到了，結構有點複雜。現在我要進行 HW2-2，寫一個 `hw2_2_verify.py`，專門提取出各縣市的最低溫和最高溫，並再次用 JSON 格式顯示出來確認。
+
+AI: 好的。我們需要遍歷 location 列表，並從 weatherElement 中過濾出名稱為 'MinT' 和 'MaxT' 的元素。我已為您實作了提取邏輯，並處理了日期格式的截取。
+> 修改檔案: hw2_2_verify.py
+
+---
+
+USER: 接著是 HW2-3。我需要把這些資料存進 SQLite 資料庫（data.db），資料表名稱定為 TemperatureForecasts。存完後，請幫我寫一段測試碼，自動查詢並列出「中部地區」的所有預報。
+
+AI: 明白。我們將使用 Python 的 `sqlite3` 套件。
+1. 建立 `init_db()` 函數來初始化 schema。
+2. 實作 `fetch_and_save_weather()` 函數。
+3. 加入一塊驗證代碼，使用 `LIKE '%中部%'` 進行 SQL 查詢。
+> 建立檔案: weather.py
+> 執行結果: 成功存入並打印出台中、彰化等地區的一週預報。
+
+---
+
+USER: 最後一關 HW2-4。我想做一個漂亮的 Dashboard。原本我是用 CSV 當資料源，現在要改成讀取剛才那個 `data.db`。我希望介面包含：全台氣溫地圖（用 folium）、溫度趨勢折線圖，還有一個表格。
+
+AI: 這是一個很棒的視覺化任務！我將為您編寫 `app.py`：
+- 使用 `streamlit` 作為框架。
+- 整合 `streamlit_folium` 顯示互動地圖。
+- 利用 `st.line_chart` 呈現趨勢。
+- 加入 `sidebar` 讓使用者可以切換日期和觀觀的地區。
+> 建立檔案: app.py
+
+---
+
+USER: 測試發現如果 API Key 失效，程式會當掉。
+
+AI: 這是個好觀察。我在 `weather.py` 中加入了 `try-except` 區塊。如果 API 請求失敗，它會自動生成一組「模擬資料（Mock Data）」，確保您的 Streamlit App 仍然可以運行並展示功能。
+
+[SESSION_END: 2026-04-28 11:30:45]
